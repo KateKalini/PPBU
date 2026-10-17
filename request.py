@@ -18,6 +18,12 @@ def get_main(url):
     for l in langs:
         print(l.text)
 
-get_main('https://www.hse.ru/staff/allat')
-get_main('https://www.hse.ru/org/persons/135897')
-get_main('https://www.hse.ru/org/persons/63890353')
+
+pul_addres = (
+    'https://www.hse.ru/staff/allat',
+    'https://www.hse.ru/org/persons/135897',
+    'https://www.hse.ru/org/persons/63890353'
+)
+
+for address in pul_addres:
+    get_main(address)
