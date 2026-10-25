@@ -8,16 +8,11 @@ import pprint
 from bottle import response
 
 
-def update_currency_label(event):
-    code = target_combobox.get()
+def update_label(event):
+    combobox = event.widget
+    code = combobox.get()
     name = currencies[code]
-    target_label.config(text=name)
-
-
-def update_base_label(event):
-    code = base_combobox.get()
-    name = currencies[code]
-    base_label.config(text=name)
+    combobox.associated_label.config(text=name)
 
 def exchange():
     target_code = target_combobox.get().strip()
@@ -60,27 +55,25 @@ currencies = {
 
 root = Tk()
 root.title('Курс обмена валют USD')
-root.geometry('360x250')
+root.geometry('360x300')
 
-Label(root, text='Базовая валюта').pack()
-base_combobox = ttk.Combobox(root, values=list(currencies.keys()))
-base_combobox.pack(pady=3, padx=10)
-base_combobox.bind('<<ComboboxSelected>>', update_base_label)
-base_label = ttk.Label()
-base_label.pack()
+def create_currency_block(title_text):
+    Label(root, text=title_text, font=('Arial', 10, 'bold')).pack(pady=(10, 2))
+    combo = ttk.Combobox(root, values=list(currencies.keys()), state="readonly")
+    combo.pack(pady=3, padx=10)
+    label = ttk.Label(root, text="")
+    label.pack()
 
-Label(root, text='Целевая валюта' ).pack(padx=10)
+    combo.associated_label = label
+    combo.bind('<<ComboboxSelected>>', update_label)
+    return combo
 
-target_combobox = ttk.Combobox(root, values=list(currencies.keys()))
-target_combobox.pack(pady=3, padx=10)
-target_combobox.bind('<<ComboboxSelected>>', update_currency_label)
 
-target_label = ttk.Label()
-target_label.pack()
-# entry = Entry(root)
-# entry.pack()
+base_combobox1 = create_currency_block('Первая базовая валюта')
+base_combobox2 = create_currency_block('Вторая базовая валюта')
+target_combobox = create_currency_block('Целевая валюта')
 
-Button(text='Получить курс обмена к доллару',
+Button(text='Получить курс обмена',
        command=exchange).pack(pady=10, padx=10)
 
 
