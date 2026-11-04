@@ -5,6 +5,16 @@ import requests
 
 
 
+crypto_currencies = {
+    'BTC': {'id': 'bitcoin', 'name': 'Биткоин'},
+    'ETH': {'id': 'ethereum', 'name': 'Эфириум'},
+    'SOL': {'id': 'solana', 'name': 'Солана'},
+    'BNB': {'id': 'binancecoin', 'name': 'Бинанс Коин'},
+    'XRP': {'id': 'ripple', 'name': 'Рипл'},
+    'DOGE': {'id': 'dogecoin', 'name': 'Догикоин'},
+    'TON': {'id': 'the-open-network', 'name': 'Тонкоин'}
+}
+
 root = Tk()
 root.title('Крипто-Калькулятор (USD)')
 root.geometry('360x150')
