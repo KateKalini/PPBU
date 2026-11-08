@@ -4,6 +4,16 @@ from tkinter import ttk
 import requests
 
 
+crypto_currencies = {
+    'BTC': {'name': 'Биткоин'},
+    'ETH': {'name': 'Эфириум'},
+    'SOL': {'name': 'Солана'},
+    'BNB': {'name': 'Бинанс Коин'},
+    'XRP': {'name': 'Рипл'},
+    'DOGE': {'name': 'Догикоин'},
+    'TON': {'name': 'Тонкоин'}
+}
+
 root = Tk()
 root.title('Крипто-Калькулятор (KuCoin)')
 root.geometry('360x150')
