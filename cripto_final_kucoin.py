@@ -4,6 +4,41 @@ from tkinter import ttk
 import requests
 
 
+def update_base_label(event):
+    code = base_combobox.get()
+    name = crypto_currencies[code]['name']
+    base_label.config(text=name)
+
+
+def exchange():
+    crypto_code = base_combobox.get().strip()
+    if crypto_code:
+        try:
+            # Для KuCoin формируем торговую пару к USDT (например, BTC-USDT)
+            symbol = f"{crypto_code}-USDT"
+
+            url = "https://api.kucoin.com/api/v1/market/orderbook/level1"
+            response = requests.get(url, params={"symbol": symbol})
+            response.raise_for_status()
+            res_data = response.json()
+
+            if res_data.get("code") == "200000" and res_data.get("data"):
+                exchange_rate = float(res_data["data"]["price"])
+                crypto_name = crypto_currencies[crypto_code]['name']
+
+                # Форматируем вывод: для дешевых монет выводим больше знаков после точки
+                fmt = ".2f" if exchange_rate >= 1 else ".5f"
+
+                mb.showinfo('Курс обмена (KuCoin)',
+                            f'Курс: {exchange_rate:{fmt}} USDT (USD) за 1 {crypto_name}')
+            else:
+                mb.showerror('Ошибка API', f'Биржа вернула ошибку: {res_data.get("msg", "Неизвестная ошибка")}')
+        except Exception as er:
+            mb.showerror('Ошибка', f'Не удалось получить данные с KuCoin:\n{er}')
+    else:
+        mb.showwarning('Внимание', 'Пожалуйста, выберите криптовалюту')
+
+
 crypto_currencies = {
     'BTC': {'name': 'Биткоин'},
     'ETH': {'name': 'Эфириум'},
@@ -13,6 +48,7 @@ crypto_currencies = {
     'DOGE': {'name': 'Догикоин'},
     'TON': {'name': 'Тонкоин'}
 }
+
 
 root = Tk()
 root.title('Крипто-Калькулятор (KuCoin)')
